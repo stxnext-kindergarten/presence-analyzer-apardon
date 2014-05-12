@@ -3,7 +3,7 @@
 Defines views.
 """
 
-import calendar
+import calendar, datetime
 from flask import redirect
 
 from presence_analyzer.main import app
@@ -67,3 +67,14 @@ def presence_weekday_view(user_id):
 
     result.insert(0, ('Weekday', 'Presence (s)'))
     return result
+
+@app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
+@jsonify
+def presence_start_end(user_id):
+    """
+    Return average presence time of given user
+    """
+    data = get_data()
+    if user_id not in data:
+        log.debug('User %s not found!', user_id)
+        return []
