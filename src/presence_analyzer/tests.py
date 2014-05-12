@@ -111,9 +111,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         self.assertIsInstance(utils.mean([1, 2, 3]), float)
         self.assertEqual(utils.mean([1, 2, 3]), 2)
-        self.assertEqual(utils.mean([]), 0)
-        self.assertNotEqual(utils.mean([1, 1, 1]), 2)
-        self.assertIsNotNone(utils.mean([]))
+        self.assertEqual(utils.mean([-10, 10]), 0)
+        self.assertGreater(utils.mean([12, 13, 14]), 10)
 
     def test_seconds_since_midnight(self):
         """
@@ -121,8 +120,6 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         self.assertIsInstance(utils.seconds_since_midnight(
             datetime.datetime.now()), int)
-        self.assertIsNotNone(utils.seconds_since_midnight(
-            datetime.datetime.now()))
         self.assertNotEqual(datetime.datetime.now().second, -1)
 
     def test_interval(self):
@@ -133,7 +130,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         end = datetime.datetime.now() + datetime.timedelta(hours=1)
         self.assertIsInstance(utils.interval(start, end), int)
         self.assertEqual(utils.interval(start, end), 3600)
-        self.assertNotEqual(utils.interval(start, end), "3600")
+        end = datetime.datetime.now() + datetime.timedelta(hours=2)
+        self.assertEqual(utils.interval(start, end), 7200)
 
     def test_group_by_weekday(self):
         """
@@ -146,8 +144,10 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             },
         }
         self.assertIsInstance(utils.group_by_weekday({}), dict)
+        self.assertIsInstance(utils.group_by_weekday(sample_date), dict)
         self.assertNotEqual(utils.group_by_weekday({}), {})
         self.assertEqual(len(utils.group_by_weekday({})), 7)
+        self.assertEqual(len(utils.group_by_weekday(sample_date)), 7)
         self.assertEqual(
             utils.group_by_weekday({}).values(), [[] for i in range(7)])
         self.assertEqual(
