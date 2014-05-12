@@ -78,3 +78,20 @@ def presence_start_end(user_id):
     if user_id not in data:
         log.debug('User %s not found!', user_id)
         return []
+
+    total_start = []
+    start_counter = 0
+
+    for date in data[user_id]:
+        total_start.append(str(data[user_id][date]['start']))
+
+    totalSecs = 0
+    for tm in total_start:
+        timeParts = [int(s) for s in tm.split(':')]
+        totalSecs += (timeParts[0] * 60 + timeParts[1]) * 60 + timeParts[2]
+        start_counter += 1
+    totalSecs, sec = divmod(totalSecs, 60)
+    hr, min = divmod(totalSecs, 60)
+    total = "%d:%02d:%02d" % (hr, min, sec)
+
+    return total, start_counter
