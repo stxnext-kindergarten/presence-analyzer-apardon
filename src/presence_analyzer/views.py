@@ -79,19 +79,37 @@ def presence_start_end(user_id):
         log.debug('User %s not found!', user_id)
         return []
 
-    total_start = []
-    start_counter = 0
+    total_start, total_end = [], []
+    start_counter , end_counter= 0, 0
 
     for date in data[user_id]:
         total_start.append(str(data[user_id][date]['start']))
+        total_end.append(str(data[user_id][date]['end']))
 
-    totalSecs = 0
+    total_start_sec = 0
     for tm in total_start:
-        timeParts = [int(s) for s in tm.split(':')]
-        totalSecs += (timeParts[0] * 60 + timeParts[1]) * 60 + timeParts[2]
+        time_part = [int(s) for s in tm.split(':')]
+        total_start_sec += (time_part[0] * 60 + time_part[1]) * 60 + time_part[2]
         start_counter += 1
-    totalSecs, sec = divmod(totalSecs, 60)
-    hr, min = divmod(totalSecs, 60)
-    total = "%d:%02d:%02d" % (hr, min, sec)
+    total_start_sec, sec = divmod(total_start_sec, 60)
+    hr, min = divmod(total_start_sec, 60)
+    start_sum = "%d:%02d:%02d" % (hr, min, sec)
 
-    return total, start_counter
+    start_sum_hour = start_sum.split(':')[0]
+    start_sum_min = start_sum.split(':')[1]
+    start_sum_sec = start_sum.split(':')[2]    
+
+    total_end_sec = 0
+    for tm in total_end:
+        time_part = [int(s) for s in tm.split(':')]
+        total_end_sec += (time_part[0] * 60 + time_part[1]) * 60 + time_part[2]
+        end_counter += 1
+    total_end_sec, sec = divmod(total_end_sec, 60)
+    hr, min = divmod(total_end_sec, 60)
+    end_sum = "%d:%02d:%02d" % (hr, min, sec)
+
+    end_sum_hour = end_sum.split(':')[0]
+    end_sum_min = end_sum.split(':')[1]
+    end_sum_sec = end_sum.split(':')[2]
+
+    return type(end_sum_hour)
