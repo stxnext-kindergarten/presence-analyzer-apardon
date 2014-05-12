@@ -111,16 +111,15 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         self.assertIsInstance(utils.mean([1, 2, 3]), float)
         self.assertEqual(utils.mean([1, 2, 3]), 2)
-        self.assertEqual(utils.mean([-10, 10]), 0)
-        self.assertGreater(utils.mean([12, 13, 14]), 10)
 
     def test_seconds_since_midnight(self):
         """
         Test calculating amount on seconds since midnight
         """
+
         self.assertIsInstance(utils.seconds_since_midnight(
             datetime.datetime.now()), int)
-        self.assertNotEqual(datetime.datetime.now().second, -1)
+        self.assertNotEqual(datetime.time(15, 44, 32), 3000)
 
     def test_interval(self):
         """
@@ -143,16 +142,16 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 'end': datetime.time(17, 30, 0),
             },
         }
+        groupd_sample = utils.group_by_weekday(sample_date)
         self.assertIsInstance(utils.group_by_weekday({}), dict)
-        self.assertIsInstance(utils.group_by_weekday(sample_date), dict)
         self.assertNotEqual(utils.group_by_weekday({}), {})
         self.assertEqual(len(utils.group_by_weekday({})), 7)
-        self.assertEqual(len(utils.group_by_weekday(sample_date)), 7)
+        self.assertEqual(len(utils.group_by_weekday(groupd_sample)), 7)
         self.assertEqual(
             utils.group_by_weekday({}).values(), [[] for i in range(7)])
         self.assertEqual(
             utils.group_by_weekday({}).keys(), [i for i in range(7)])
-        self.assertNotEqual(utils.group_by_weekday(sample_date), {})
+        self.assertNotEqual(utils.group_by_weekday(groupd_sample), {})
 
 
 def suite():
