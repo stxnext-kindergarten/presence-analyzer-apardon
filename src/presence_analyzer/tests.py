@@ -105,6 +105,55 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
 
+    def test_mean(self):
+        """
+        Test calculating arithmetic mean
+        """
+        self.assertIsInstance(utils.mean([1, 2, 3]), float)
+        self.assertEqual(utils.mean([1, 2, 3]), 2)
+        self.assertEqual(utils.mean([]), 0)
+        self.assertNotEqual(utils.mean([1, 1, 1]), 2)
+        self.assertIsNotNone(utils.mean([]))
+
+    def test_seconds_since_midnight(self):
+        """
+        Test calculating amount on seconds since midnight
+        """
+        self.assertIsInstance(utils.seconds_since_midnight(
+            datetime.datetime.now()), int)
+        self.assertIsNotNone(utils.seconds_since_midnight(
+            datetime.datetime.now()))
+        self.assertNotEqual(datetime.datetime.now().second, -1)
+
+    def test_interval(self):
+        """
+        Test calculating interval between two datetime.time objects in seconds
+        """
+        start = datetime.datetime.now()
+        end = datetime.datetime.now() + datetime.timedelta(hours=1)
+        self.assertIsInstance(utils.interval(start, end), int)
+        self.assertEqual(utils.interval(start, end), 3600)
+        self.assertNotEqual(utils.interval(start, end), "3600")
+
+    def test_group_by_weekday(self):
+        """
+        Test groups presence entris by weekday
+        """
+        sample_date = {
+            datetime.date(2013, 10, 1): {
+                'start': datetime.time(9, 0, 0),
+                'end': datetime.time(17, 30, 0),
+            },
+        }
+        self.assertIsInstance(utils.group_by_weekday({}), dict)
+        self.assertNotEqual(utils.group_by_weekday({}), {})
+        self.assertEqual(len(utils.group_by_weekday({})), 7)
+        self.assertEqual(
+            utils.group_by_weekday({}).values(), [[] for i in range(7)])
+        self.assertEqual(
+            utils.group_by_weekday({}).keys(), [i for i in range(7)])
+        self.assertNotEqual(utils.group_by_weekday(sample_date), {})
+
 
 def suite():
     """
