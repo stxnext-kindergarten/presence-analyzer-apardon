@@ -59,7 +59,7 @@ def presence_weekday_view(user_id):
     data = get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
-        return []
+        return[]
 
     weekdays = group_by_weekday(data[user_id])
     result = [(calendar.day_abbr[weekday], sum(intervals))
@@ -112,4 +112,6 @@ def presence_start_end(user_id):
     end_sum_min = end_sum.split(':')[1]
     end_sum_sec = end_sum.split(':')[2]
 
-    return type(end_sum_hour)
+    result = str(int(start_sum_hour)/start_counter) + ":" + str(int(start_sum_min)/start_counter) + ":" + str(int(start_sum_sec)/start_counter)
+
+    return result
