@@ -7,7 +7,8 @@ import calendar, datetime
 from flask import redirect
 
 from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
+from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday, group_by_start, group_by_end
+from collections import OrderedDict
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
@@ -79,39 +80,20 @@ def presence_start_end(user_id):
         log.debug('User %s not found!', user_id)
         return []
 
-    total_start, total_end = [], []
-    start_counter , end_counter= 0, 0
+    starts = group_by_start(data[user_id])
+    ends = group_by_end(data[user_id])
 
-    for date in data[user_id]:
-        total_start.append(str(data[user_id][date]['start']))
-        total_end.append(str(data[user_id][date]['end']))
+    starts_result = [(calendar.day_abbr[weekday], mean(intervals))
+              for weekday, intervals in starts.items()]
 
-    total_start_sec = 0
-    for tm in total_start:
-        time_part = [int(s) for s in tm.split(':')]
-        total_start_sec += (time_part[0] * 60 + time_part[1]) * 60 + time_part[2]
-        start_counter += 1
-    total_start_sec, sec = divmod(total_start_sec, 60)
-    hr, min = divmod(total_start_sec, 60)
-    start_sum = "%d:%02d:%02d" % (hr, min, sec)
+    ends_result = [(calendar.day_abbr[weekday], mean(intervals))
+              for weekday, intervals in ends.items()]
 
-    start_sum_hour = start_sum.split(':')[0]
-    start_sum_min = start_sum.split(':')[1]
-    start_sum_sec = start_sum.split(':')[2]    
+    zipped = zip(starts_result, ends_result)
 
-    total_end_sec = 0
-    for tm in total_end:
-        time_part = [int(s) for s in tm.split(':')]
-        total_end_sec += (time_part[0] * 60 + time_part[1]) * 60 + time_part[2]
-        end_counter += 1
-    total_end_sec, sec = divmod(total_end_sec, 60)
-    hr, min = divmod(total_end_sec, 60)
-    end_sum = "%d:%02d:%02d" % (hr, min, sec)
+    L = []
+    for l in zipped:
+        l = l[0] + l[1]
+        L.append(list(OrderedDict.fromkeys(l)))
 
-    end_sum_hour = end_sum.split(':')[0]
-    end_sum_min = end_sum.split(':')[1]
-    end_sum_sec = end_sum.split(':')[2]
-
-    result = str(int(start_sum_hour)/start_counter) + ":" + str(int(start_sum_min)/start_counter) + ":" + str(int(start_sum_sec)/start_counter)
-
-    return result
+    return L
