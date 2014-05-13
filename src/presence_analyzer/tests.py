@@ -111,12 +111,12 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         self.assertIsInstance(utils.mean([1, 2, 3]), float)
         self.assertEqual(utils.mean([1, 2, 3]), 2)
+        self.assertEqual(utils.mean([-10, 10]), 0)
 
     def test_seconds_since_midnight(self):
         """
         Test calculating amount on seconds since midnight
         """
-
         self.assertIsInstance(utils.seconds_since_midnight(
             datetime.datetime.now()), int)
         self.assertNotEqual(datetime.time(15, 44, 32), 3000)
@@ -129,8 +129,6 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         end = datetime.datetime.now() + datetime.timedelta(hours=1)
         self.assertIsInstance(utils.interval(start, end), int)
         self.assertEqual(utils.interval(start, end), 3600)
-        end = datetime.datetime.now() + datetime.timedelta(hours=2)
-        self.assertEqual(utils.interval(start, end), 7200)
 
     def test_group_by_weekday(self):
         """
@@ -142,16 +140,17 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 'end': datetime.time(17, 30, 0),
             },
         }
+        expected_result = {
+            0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []
+        }
+        dample_date = datetime.date(2013, 10, 1)
         groupd_sample = utils.group_by_weekday(sample_date)
-        self.assertIsInstance(utils.group_by_weekday({}), dict)
-        self.assertNotEqual(utils.group_by_weekday({}), {})
-        self.assertEqual(len(utils.group_by_weekday({})), 7)
-        self.assertEqual(len(utils.group_by_weekday(groupd_sample)), 7)
+        self.assertIsInstance(groupd_sample, dict)
+        self.assertEqual(len(groupd_sample), 7)
+        self.assertEqual(groupd_sample.keys(), [i for i in range(7)])
+        self.assertEqual(utils.group_by_weekday({}), expected_result)
         self.assertEqual(
-            utils.group_by_weekday({}).values(), [[] for i in range(7)])
-        self.assertEqual(
-            utils.group_by_weekday({}).keys(), [i for i in range(7)])
-        self.assertNotEqual(utils.group_by_weekday(groupd_sample), {})
+            sample_date[dample_date]['end'], datetime.time(17, 30, 0))
 
 
 def suite():
