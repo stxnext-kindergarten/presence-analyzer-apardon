@@ -92,8 +92,13 @@ def presence_start_end(user_id):
     zipped = zip(starts_result, ends_result)
 
     L = []
+    result = []
+
     for l in zipped:
         l = l[0] + l[1]
-        L.append(list(OrderedDict.fromkeys(l)))
+        L.append(l)
+
+    for l in L:
+        l.pop(2)
 
     return L
