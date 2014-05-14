@@ -100,17 +100,12 @@
                         $.getJSON("/api/v1/presence_start_end/"+selected_user, function(
                             result) {
 
-                            var x = new Array(result.length);
-                            for (var i = 0; i < result.length; i++) {
-                                x[i] = new Array(3);
-                            }
-
                             for (var i = 0; i < result.length; i++) {
                                 for (var j = 0; j <= 2; j++) {
                                     if (j == 0) {
-                                        x[i][j] = result[i][j]
+                                        result[i][j] = result[i][j]
                                     } else{
-                                        x[i][j] = new Date(result[i][j] * 1000)
+                                        result[i][j] = new Date(result[i][j] * 1000)
                                     };
                                 };
                             };
@@ -119,7 +114,7 @@
                             data.addColumn('string', 'Weekday');
                             data.addColumn({ type: 'datetime', id: 'Start' });
                             data.addColumn({ type: 'datetime', id: 'End' });
-                            data.addRows(x);
+                            data.addRows(result);
                             var options = {
                                 hAxis: {title: 'Weekday'}
                             };
