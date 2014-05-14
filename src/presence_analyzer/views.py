@@ -7,10 +7,7 @@ import calendar
 from flask import redirect
 
 from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean
-from presence_analyzer.utils import group_by_weekday
-from presence_analyzer.utils import group_by_start
-from presence_analyzer.utils import group_by_end
+from presence_analyzer import utils
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
@@ -25,46 +22,46 @@ def mainpage():
 
 
 @app.route('/api/v1/users', methods=['GET'])
-@jsonify
+@utils.jsonify
 def users_view():
     """
     Users listing for dropdown.
     """
-    data = get_data()
+    data = utils.get_data()
     return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
             for i in data.keys()]
 
 
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
-@jsonify
+@utils.jsonify
 def mean_time_weekday_view(user_id):
     """
     Returns mean presence time of given user grouped by weekday.
     """
-    data = get_data()
+    data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
         return []
 
-    weekdays = group_by_weekday(data[user_id])
-    result = [(calendar.day_abbr[weekday], mean(intervals))
+    weekdays = utils.group_by_weekday(data[user_id])
+    result = [(calendar.day_abbr[weekday], utils.mean(intervals))
               for weekday, intervals in weekdays.items()]
 
     return result
 
 
 @app.route('/api/v1/presence_weekday/<int:user_id>', methods=['GET'])
-@jsonify
+@utils.jsonify
 def presence_weekday_view(user_id):
     """
     Returns total presence time of given user grouped by weekday.
     """
-    data = get_data()
+    data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
-        return[]
+        return []
 
-    weekdays = group_by_weekday(data[user_id])
+    weekdays = utils.group_by_weekday(data[user_id])
     result = [(calendar.day_abbr[weekday], sum(intervals))
               for weekday, intervals in weekdays.items()]
 
@@ -73,34 +70,19 @@ def presence_weekday_view(user_id):
 
 
 @app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
-@jsonify
+@utils.jsonify
 def presence_start_end(user_id):
     """
     Return average presence time of given user
     """
-    data = get_data()
+    data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
         return []
 
-    starts = group_by_start(data[user_id])
-    ends = group_by_end(data[user_id])
+    start_end_by_weekday = utils.group_start_end_by_weekday(data[user_id])
 
-    starts_result = [(calendar.day_abbr[weekday], mean(intervals))
-                     for weekday, intervals in starts.items()]
-
-    ends_result = [(calendar.day_abbr[weekday], mean(intervals))
-                   for weekday, intervals in ends.items()]
-
-    zipped = zip(starts_result, ends_result)
-
-    result = []
-
-    for l in zipped:
-        tmp = []
-        tmp.append(l[0][0])
-        tmp.append(l[0][1])
-        tmp.append(l[1][1])
-        result.append(tmp)
+    result = [(calendar.day_abbr[weekday], utils.mean(intervals['starts']), utils.mean(intervals['ends']))
+              for weekday, intervals in start_end_by_weekday.items()]
 
     return result

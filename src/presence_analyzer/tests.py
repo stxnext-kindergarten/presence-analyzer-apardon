@@ -53,27 +53,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 2)
         self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
 
-    def test_mean_time_weekday(self):
-        """
-        Test users mean presence time by weekday
-        """
-        resp = self.client.get('/api/v1/mean_time_weekday/100')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/json')
-        data = json.loads(resp.data)
-        self.assertEqual(len(data), 0)
-
-    def test_presence_weekday(self):
-        """
-        Test users total presence time by weekday
-        """
-        resp = self.client.get('/api/v1/presence_weekday/10')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/json')
-        data = json.loads(resp.data)
-        self.assertEqual(len(data), 8)
-        self.assertListEqual(data[0], ["Weekday", "Presence (s)"])
-
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """

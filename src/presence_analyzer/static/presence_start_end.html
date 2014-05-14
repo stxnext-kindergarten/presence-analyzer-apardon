@@ -79,13 +79,6 @@
         google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
     </script>
     <script type="text/javascript">
-        function toDateTime(secs) {
-            var t = new Date(1970, 0, 1);
-            t.setSeconds(secs);
-            return t;
-        }
-    </script>
-    <script type="text/javascript">
         (function($) {
             $(document).ready(function(){
                 var loading = $('#loading');
@@ -117,7 +110,7 @@
                                     if (j == 0) {
                                         x[i][j] = result[i][j]
                                     } else{
-                                        x[i][j] = new toDateTime(result[i][j]);
+                                        x[i][j] = new Date(result[i][j] * 1000)
                                     };
                                 };
                             };
