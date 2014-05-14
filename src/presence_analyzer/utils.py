@@ -77,6 +77,7 @@ def group_by_weekday(items):
         result[date.weekday()].append(interval(start, end))
     return result
 
+
 def group_by_start(items):
     """
     Groups start by weekday.
@@ -87,6 +88,7 @@ def group_by_start(items):
         result[date.weekday()].append(seconds_since_midnight(start))
     return result
 
+
 def group_by_end(items):
     """
     Groups end by weekday.
@@ -96,6 +98,7 @@ def group_by_end(items):
         end = items[date]['end']
         result[date.weekday()].append(seconds_since_midnight(end))
     return result
+
 
 def seconds_since_midnight(time):
     """
