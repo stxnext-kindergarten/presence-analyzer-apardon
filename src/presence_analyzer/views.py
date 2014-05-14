@@ -82,7 +82,8 @@ def presence_start_end(user_id):
 
     start_end_by_weekday = utils.group_start_end_by_weekday(data[user_id])
 
-    result = [(calendar.day_abbr[weekday], utils.mean(intervals['starts']), utils.mean(intervals['ends']))
+    result = [(calendar.day_abbr[weekday], utils.mean(intervals['starts']),
+              utils.mean(intervals['ends']))
               for weekday, intervals in start_end_by_weekday.items()]
 
     return result
