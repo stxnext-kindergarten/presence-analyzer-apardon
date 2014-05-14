@@ -140,9 +140,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 'end': datetime.time(17, 30, 0),
             },
         }
-        expected_result = {
-            0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []
-        }
+        expected_result = {i: [] for i in range(7)}
         dample_date = datetime.date(2013, 10, 1)
         groupd_sample = utils.group_by_weekday(sample_date)
         self.assertIsInstance(groupd_sample, dict)
