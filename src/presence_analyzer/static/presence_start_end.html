@@ -79,6 +79,13 @@
         google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
     </script>
     <script type="text/javascript">
+        function toDateTime(secs) {
+            var t = new Date(1970, 0, 1);
+            t.setSeconds(secs);
+            return t;
+        }
+    </script>
+    <script type="text/javascript">
         (function($) {
             $(document).ready(function(){
                 var loading = $('#loading');
@@ -100,10 +107,18 @@
                         $.getJSON("/api/v1/presence_start_end/"+selected_user, function(
                             result) {
 
-                            for (var i = 0; i <= result.length; i++) {
-                                for (var j = 1; j <= 2; j++) {
-                                    result[i][j] = new Date(result[i][j]);
-                                    // document.writeln(result[i][j]);
+                            var x = new Array(result.length);
+                            for (var i = 0; i < result.length; i++) {
+                                x[i] = new Array(3);
+                            }
+
+                            for (var i = 0; i < result.length; i++) {
+                                for (var j = 0; j <= 2; j++) {
+                                    if (j == 0) {
+                                        x[i][j] = result[i][j]
+                                    } else{
+                                        x[i][j] = new toDateTime(result[i][j]);
+                                    };
                                 };
                             };
 
@@ -111,7 +126,7 @@
                             data.addColumn('string', 'Weekday');
                             data.addColumn({ type: 'datetime', id: 'Start' });
                             data.addColumn({ type: 'datetime', id: 'End' });
-                            data.addRows(result);
+                            data.addRows(x);
                             var options = {
                                 hAxis: {title: 'Weekday'}
                             };
@@ -124,15 +139,6 @@
                             var chart = new google.visualization.Timeline(chart_div[0]);
                             chart.draw(data, options);
                             });
-
-                        // some dummy data, this should go from API
-                        // var result = [
-                        //     ["Mon", new Date(1, 1, 1, 7, 37, 38), new Date(1, 1, 1, 15, 07, 14)],
-                        //     ["Tue", new Date(1, 1, 1, 8, 16, 23), new Date(1, 1, 1, 14, 01, 47)],
-                        //     ["Wed", new Date(1, 1, 1, 7, 00, 06), new Date(1, 1, 1, 13, 24, 12)],
-                        //     ["Thu", new Date(1, 1, 1, 7, 26, 32), new Date(1, 1, 1, 12, 40, 45)],
-                        //     ["Fri", new Date(1, 1, 1, 6, 53, 22), new Date(1, 1, 1, 12, 52, 09)]
-                        // ] 
                     }
                 });
             });

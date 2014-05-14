@@ -91,14 +91,13 @@ def presence_start_end(user_id):
 
     zipped = zip(starts_result, ends_result)
 
-    L = []
     result = []
 
     for l in zipped:
-        l = l[0] + l[1]
-        L.append(l)
+        tmp = []
+        tmp.append(l[0][0])
+        tmp.append(l[0][1])
+        tmp.append(l[1][1])
+        result.append(tmp)
 
-    for l in L:
-        l.pop(2)
-
-    return L
+    return result

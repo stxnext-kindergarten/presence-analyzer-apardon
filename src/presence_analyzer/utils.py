@@ -79,7 +79,7 @@ def group_by_weekday(items):
 
 def group_by_start(items):
     """
-    Groups presence entries by weekday.
+    Groups start by weekday.
     """
     result = {i: [] for i in range(7)}
     for date in items:
@@ -89,7 +89,7 @@ def group_by_start(items):
 
 def group_by_end(items):
     """
-    Groups presence entries by weekday.
+    Groups end by weekday.
     """
     result = {i: [] for i in range(7)}
     for date in items:
