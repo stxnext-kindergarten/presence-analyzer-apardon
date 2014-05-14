@@ -4,7 +4,6 @@ Defines views.
 """
 
 import calendar
-import datetime
 from flask import redirect
 
 from presence_analyzer.main import app
@@ -12,7 +11,6 @@ from presence_analyzer.utils import jsonify, get_data, mean
 from presence_analyzer.utils import group_by_weekday
 from presence_analyzer.utils import group_by_start
 from presence_analyzer.utils import group_by_end
-from collections import OrderedDict
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
