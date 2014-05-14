@@ -82,13 +82,13 @@ def group_start_end_by_weekday(items):
     """
     Groups start and end by weekday.
     """
-    tmp = {i: {'starts': [], 'ends': []} for i in range(7)}
+    result = {i: {'starts': [], 'ends': []} for i in range(7)}
     for date in items:
         start = items[date]['start']
         end = items[date]['end']
-        tmp[date.weekday()]['starts'].append(seconds_since_midnight(start))
-        tmp[date.weekday()]['ends'].append(seconds_since_midnight(end))
-    return tmp
+        result[date.weekday()]['starts'].append(seconds_since_midnight(start))
+        result[date.weekday()]['ends'].append(seconds_since_midnight(end))
+    return result
 
 
 def seconds_since_midnight(time):
