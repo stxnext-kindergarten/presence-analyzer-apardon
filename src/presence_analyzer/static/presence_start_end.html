@@ -100,15 +100,10 @@
                         $.getJSON("/api/v1/presence_start_end/"+selected_user, function(
                             result) {
 
-                            for (var i = 0; i < result.length; i++) {
-                                for (var j = 0; j <= 2; j++) {
-                                    if (j == 0) {
-                                        result[i][j] = result[i][j]
-                                    } else{
-                                        result[i][j] = new Date(result[i][j] * 1000)
-                                    };
-                                };
-                            };
+                            $.each(result, function(index, value) {
+                                 value[1] = new Date(value[1] * 1000);
+                                 value[2] = new Date(value[2] * 1000);
+                            });
 
                             var data = new google.visualization.DataTable();
                             data.addColumn('string', 'Weekday');

@@ -92,7 +92,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         sample_data = utils.group_start_end_by_weekday(data[10])
         self.assertIsInstance(sample_data, dict)
         self.assertEqual(len(sample_data), 7)
-
+        self.assertNotEqual(sample_data[1]['starts'], 0)
 
 
 def suite():
