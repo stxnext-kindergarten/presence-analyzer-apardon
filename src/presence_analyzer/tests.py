@@ -148,7 +148,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             6: []
         }
         self.assertEqual(len(grouped_sample), 7)
-        self.assertIsInstance(grouped_sample, dict)        
+        self.assertIsInstance(grouped_sample, dict)
         self.assertEqual(
             utils.group_by_weekday({}), expected_result_for_empty_dict)
         self.assertEqual(grouped_sample, expected_result_for_grouped_sample)
