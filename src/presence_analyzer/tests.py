@@ -119,7 +119,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         self.assertIsInstance(utils.seconds_since_midnight(
             datetime.datetime.now()), int)
-        self.assertNotEqual(datetime.time(15, 44, 32), 3000)
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(2, 30, 15)), 9015)
 
     def test_interval(self):
         """
@@ -134,21 +135,23 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Test groups presence entris by weekday
         """
-        sample_date = {
-            datetime.date(2013, 10, 1): {
-                'start': datetime.time(9, 0, 0),
-                'end': datetime.time(17, 30, 0),
-            },
+        sample_data = utils.get_data()
+        grouped_sample = utils.group_by_weekday(sample_data[10])
+        expected_result_for_empty_dict = {i: [] for i in range(7)}
+        expected_result_for_grouped_sample = {
+            0: [],
+            1: [30047],
+            2: [24465],
+            3: [23705],
+            4: [],
+            5: [],
+            6: []
         }
-        expected_result = {i: [] for i in range(7)}
-        dample_date = datetime.date(2013, 10, 1)
-        groupd_sample = utils.group_by_weekday(sample_date)
-        self.assertIsInstance(groupd_sample, dict)
-        self.assertEqual(len(groupd_sample), 7)
-        self.assertEqual(groupd_sample.keys(), [i for i in range(7)])
-        self.assertEqual(utils.group_by_weekday({}), expected_result)
+        self.assertIsInstance(grouped_sample, dict)
+        self.assertEqual(len(grouped_sample), 7)
         self.assertEqual(
-            sample_date[dample_date]['end'], datetime.time(17, 30, 0))
+            utils.group_by_weekday({}), expected_result_for_empty_dict)
+        self.assertEqual(grouped_sample, expected_result_for_grouped_sample)
 
 
 def suite():
