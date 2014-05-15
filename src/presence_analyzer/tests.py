@@ -88,12 +88,34 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Test grouping start and end time by weekday
         """
+        expected_result = {
+            0: {
+                'starts': [], 'ends': []
+            },
+            1: {
+                'starts': [34745], 'ends': [64792]
+            },
+            2: {
+                'starts': [33592], 'ends': [58057]
+            },
+            3: {
+                'starts': [38926], 'ends': [62631]
+            },
+            4: {
+                'starts': [], 'ends': []
+            },
+            5: {
+                'starts': [], 'ends': []
+            },
+            6: {
+                'starts': [], 'ends': []
+            }
+        }
         data = utils.get_data()
         sample_data = utils.group_start_end_by_weekday(data[10])
         self.assertIsInstance(sample_data, dict)
         self.assertEqual(len(sample_data), 7)
-        self.assertEqual(sample_data.keys(), [0, 1, 2, 3, 4, 5, 6])
-        self.assertEqual(sample_data[1].keys(), ['starts', 'ends'])
+        self.assertEqual(sample_data, expected_result)
 
 
 def suite():
