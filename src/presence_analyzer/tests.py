@@ -53,27 +53,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 2)
         self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
 
-    def test_mean_time_weekday(self):
-        """
-        Test users mean presence time by weekday
-        """
-        resp = self.client.get('/api/v1/mean_time_weekday/100')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/json')
-        data = json.loads(resp.data)
-        self.assertEqual(len(data), 0)
-
-    def test_presence_weekday(self):
-        """
-        Test users total presence time by weekday
-        """
-        resp = self.client.get('/api/v1/presence_weekday/10')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content_type, 'application/json')
-        data = json.loads(resp.data)
-        self.assertEqual(len(data), 8)
-        self.assertListEqual(data[0], ["Weekday", "Presence (s)"])
-
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """
@@ -104,6 +83,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertItemsEqual(data[10][sample_date].keys(), ['start', 'end'])
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
+
 
     def test_mean(self):
         """
@@ -152,6 +132,39 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertEqual(
             utils.group_by_weekday({}), expected_result_for_empty_dict)
         self.assertEqual(grouped_sample, expected_result_for_grouped_sample)
+
+    def test_group_start_end_by_weekday(self):
+        """
+        Test grouping start and end time by weekday
+        """
+        expected_result = {
+            0: {
+                'starts': [], 'ends': []
+            },
+            1: {
+                'starts': [34745], 'ends': [64792]
+            },
+            2: {
+                'starts': [33592], 'ends': [58057]
+            },
+            3: {
+                'starts': [38926], 'ends': [62631]
+            },
+            4: {
+                'starts': [], 'ends': []
+            },
+            5: {
+                'starts': [], 'ends': []
+            },
+            6: {
+                'starts': [], 'ends': []
+            }
+        }
+        data = utils.get_data()
+        sample_data = utils.group_start_end_by_weekday(data[10])
+        self.assertIsInstance(sample_data, dict)
+        self.assertEqual(len(sample_data), 7)
+        self.assertEqual(sample_data, expected_result)
 
 
 def suite():
