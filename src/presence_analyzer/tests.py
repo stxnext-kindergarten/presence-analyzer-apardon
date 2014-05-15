@@ -84,6 +84,55 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
 
+
+    def test_mean(self):
+        """
+        Test calculating arithmetic mean
+        """
+        self.assertIsInstance(utils.mean([1, 2, 3]), float)
+        self.assertEqual(utils.mean([1, 2, 3]), 2)
+        self.assertEqual(utils.mean([-10, 10]), 0)
+
+    def test_seconds_since_midnight(self):
+        """
+        Test calculating amount on seconds since midnight
+        """
+        self.assertIsInstance(utils.seconds_since_midnight(
+            datetime.datetime.now()), int)
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(2, 30, 15)), 9015)
+
+    def test_interval(self):
+        """
+        Test calculating interval between two datetime.time objects in seconds
+        """
+        start = datetime.datetime.now()
+        end = datetime.datetime.now() + datetime.timedelta(hours=1)
+        self.assertIsInstance(utils.interval(start, end), int)
+        self.assertEqual(utils.interval(start, end), 3600)
+
+    def test_group_by_weekday(self):
+        """
+        Test groups presence entris by weekday
+        """
+        sample_data = utils.get_data()
+        grouped_sample = utils.group_by_weekday(sample_data[10])
+        expected_result_for_empty_dict = {i: [] for i in range(7)}
+        expected_result_for_grouped_sample = {
+            0: [],
+            1: [30047],
+            2: [24465],
+            3: [23705],
+            4: [],
+            5: [],
+            6: []
+        }
+        self.assertEqual(len(grouped_sample), 7)
+        self.assertIsInstance(grouped_sample, dict)
+        self.assertEqual(
+            utils.group_by_weekday({}), expected_result_for_empty_dict)
+        self.assertEqual(grouped_sample, expected_result_for_grouped_sample)
+
     def test_group_start_end_by_weekday(self):
         """
         Test grouping start and end time by weekday
