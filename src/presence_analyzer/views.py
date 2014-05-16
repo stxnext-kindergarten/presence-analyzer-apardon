@@ -4,7 +4,7 @@ Defines views.
 """
 
 import calendar
-from flask import redirect
+from flask import redirect, render_template, url_for
 
 from presence_analyzer.main import app
 from presence_analyzer import utils
@@ -18,7 +18,23 @@ def mainpage():
     """
     Redirects to front page.
     """
-    return redirect('/static/presence_weekday.html')
+    return render_template('presence_weekday.html')
+
+
+@app.route('/mean_time_weekday')
+def presence_mean_time_weekday():
+    """
+    Renders template to presence mean time page
+    """
+    return render_template('mean_time_weekday.html')
+
+
+@app.route('/presence_start_end')
+def presence_start_end():
+    """
+    Renders template to presence start-end page
+    """
+    return render_template('presence_start_end.html')
 
 
 @app.route('/api/v1/users', methods=['GET'])
@@ -71,7 +87,7 @@ def presence_weekday_view(user_id):
 
 @app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def presence_start_end(user_id):
+def presence_start_end_view(user_id):
     """
     Return average presence time of given user
     """

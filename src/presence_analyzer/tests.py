@@ -7,7 +7,7 @@ import json
 import datetime
 import unittest
 
-from presence_analyzer import main, views, utils
+from presence_analyzer import main, utils
 
 
 TEST_DATA_CSV = os.path.join(
@@ -39,8 +39,21 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test main page redirect.
         """
         resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 302)
-        assert resp.headers['Location'].endswith('/presence_weekday.html')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_presence_mean_time_weekday(self):
+        """
+        Test presence mean time page
+        """
+        resp = self.client.get('/mean_time_weekday')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_presence_start_end(self):
+        """
+        Test presence start-end page
+        """
+        resp = self.client.get('/presence_start_end')
+        self.assertEqual(resp.status_code, 200)
 
     def test_api_users(self):
         """
@@ -83,7 +96,6 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertItemsEqual(data[10][sample_date].keys(), ['start', 'end'])
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
-
 
     def test_mean(self):
         """
