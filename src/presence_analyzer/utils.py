@@ -7,7 +7,7 @@ import csv
 from json import dumps
 from functools import wraps
 from datetime import datetime
-
+from lxml import etree
 from flask import Response
 
 from presence_analyzer.main import app
@@ -110,3 +110,23 @@ def mean(items):
     Calculates arithmetic mean. Returns zero for empty lists.
     """
     return float(sum(items)) / len(items) if len(items) > 0 else 0
+
+
+def parse_users_xml():
+    """
+    Parses the XML file
+    """
+    users_data = app.config['USERS_XML']
+
+    with open(users_data, 'r') as f:
+        users = etree.parse(f).find('users')
+
+    users_list = [
+        {
+            'user_id': int(user.get('id')),
+            'name': user.find('name'),
+        }
+        for user in users
+    ]
+
+    return users_list

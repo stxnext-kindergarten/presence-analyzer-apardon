@@ -8,7 +8,7 @@ from flask import render_template
 
 from presence_analyzer.main import app
 from presence_analyzer import utils
-
+from lxml import etree
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
 
@@ -35,9 +35,10 @@ def users_view():
     """
     Users listing for dropdown.
     """
-    data = utils.get_data()
-    return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
-            for i in data.keys()]
+    # data = utils.get_data()
+    # return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
+    #         for i in data.keys()]
+    return utils.parse_users_xml()
 
 
 @app.route('/api/v1/mean_time_weekday/', methods=['GET'])

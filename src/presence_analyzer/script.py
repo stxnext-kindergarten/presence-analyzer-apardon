@@ -121,7 +121,7 @@ def get_users():
     app = make_app(config=DEPLOY_CFG)
     xml_url = app.config['USERS_XML_URL']
     xml_path = app.config['USERS_XML']
-    xml_data = urllib2.urlopen(xml_url)
+    data = urllib2.urlopen(xml_url)
 
     with open(xml_path, 'w') as f:
-        f.write(xml_data.read())
+        f.write(data.read())
