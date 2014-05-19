@@ -4,10 +4,10 @@ Defines views.
 """
 
 import calendar
-from flask import render_template
-
+from flask import render_template, abort
 from presence_analyzer.main import app
 from presence_analyzer import utils
+from jinja2 import TemplateNotFound
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
@@ -18,7 +18,10 @@ def mainpage():
     """
     Redirects to front page.
     """
-    return render_template('presence_weekday.html')
+    try:
+        return render_template('presence_weekday.html', active_page='mainpage')
+    except TemplateNotFound:
+        abort(404)
 
 
 @app.route('/<template_name>')
@@ -26,7 +29,18 @@ def presence(template_name):
     """
     Renders template to presence mean time page
     """
-    return render_template(template_name)
+    try:
+        return render_template(template_name, active_page=template_name)
+    except TemplateNotFound:
+        abort(404)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    Renders error page
+    """
+    return render_template('404.html'), 404
 
 
 @app.route('/api/v1/users', methods=['GET'])

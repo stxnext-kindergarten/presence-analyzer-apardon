@@ -24,10 +24,10 @@
                 <li{% if 'mainpage' == active_page %} id="selected"{% endif %}>
                     <a href="{{ url_for('mainpage') }}">Presence by weekday</a>
                 </li>
-                <li{% if 'presence(mean_time_weekday.html)' == active_page %} id="selected"{% endif %}>
+                <li{% if 'mean_time_weekday.html' == active_page %} id="selected"{% endif %}>
                     <a href="{{ url_for('presence', template_name='mean_time_weekday.html') }}">Presence mean time</a>
                 </li>
-                <li{% if 'presence(presence_start_end.html)' == active_page %} id="selected"{% endif %}>
+                <li{% if 'presence_start_end.html' == active_page %} id="selected"{% endif %}>
                     <a href="{{ url_for('presence', template_name='presence_start_end.html') }}">Presence start-end</a>
                 </li>
             </ul>
