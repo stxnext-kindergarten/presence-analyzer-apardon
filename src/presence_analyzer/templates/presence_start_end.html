@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% set active_page = "presence(presence_start_end.html)" %}
 {% block script %}
 <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
@@ -22,7 +23,7 @@
                 if(selected_user) {
                     loading.show();
                     chart_div.hide();
-                    $.getJSON("/api/v1/presence_start_end/"+selected_user, function(
+                    $.getJSON("{{ url_for('presence_start_end_view') }}/"+selected_user,  function(
                         result) {
 
                         $.each(result, function(index, value) {
@@ -55,14 +56,6 @@
 {% endblock %}
 
 {% block content %}
-<div id="header">
-    <h1>Presence analyzer</h1>
-    <ul>
-        <li><a href="{{ url_for('mainpage') }}">Presence by weekday</a></li>
-        <li><a href="{{ url_for('presence_mean_time_weekday') }}">Presence mean time</a></li>
-        <li id="selected"><a href="{{ url_for('presence_start_end') }}">Presence start-end</a></li>
-    </ul>
-</div>
 <div id="content">
     <h2>Presence start-end weekday</h2>
     <p>

@@ -45,14 +45,14 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         Test presence mean time page
         """
-        resp = self.client.get('/mean_time_weekday')
+        resp = self.client.get('/mean_time_weekday.html')
         self.assertEqual(resp.status_code, 200)
 
     def test_presence_start_end(self):
         """
         Test presence start-end page
         """
-        resp = self.client.get('/presence_start_end')
+        resp = self.client.get('/presence_start_end.html')
         self.assertEqual(resp.status_code, 200)
 
     def test_api_users(self):
