@@ -113,7 +113,7 @@ def run():
 
     werkzeug.script.run()
 
-# bin/get_users
+# bin/get-users
 def get_users():
     """
     Get users XML file.
