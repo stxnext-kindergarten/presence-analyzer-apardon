@@ -4,10 +4,10 @@ Defines views.
 """
 
 import calendar
-from flask import redirect
-
+from flask import render_template, abort
 from presence_analyzer.main import app
 from presence_analyzer import utils
+from jinja2 import TemplateNotFound
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable-msg=C0103
@@ -18,7 +18,29 @@ def mainpage():
     """
     Redirects to front page.
     """
-    return redirect('/static/presence_weekday.html')
+    try:
+        return render_template('presence_weekday.html', active_page='mainpage')
+    except TemplateNotFound:
+        abort(404)
+
+
+@app.route('/<template_name>')
+def presence(template_name):
+    """
+    Renders template to presence mean time page
+    """
+    try:
+        return render_template(template_name, active_page=template_name)
+    except TemplateNotFound:
+        abort(404)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    Renders error page
+    """
+    return render_template('404.html'), 404
 
 
 @app.route('/api/v1/users', methods=['GET'])
@@ -32,9 +54,10 @@ def users_view():
             for i in data.keys()]
 
 
+@app.route('/api/v1/mean_time_weekday/', methods=['GET'])
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def mean_time_weekday_view(user_id):
+def mean_time_weekday_view(user_id=None):
     """
     Returns mean presence time of given user grouped by weekday.
     """
@@ -50,9 +73,10 @@ def mean_time_weekday_view(user_id):
     return result
 
 
+@app.route('/api/v1/presence_weekday/', methods=['GET'])
 @app.route('/api/v1/presence_weekday/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def presence_weekday_view(user_id):
+def presence_weekday_view(user_id=None):
     """
     Returns total presence time of given user grouped by weekday.
     """
@@ -69,9 +93,10 @@ def presence_weekday_view(user_id):
     return result
 
 
+@app.route('/api/v1/presence_start_end/', methods=['GET'])
 @app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def presence_start_end(user_id):
+def presence_start_end_view(user_id=None):
     """
     Return average presence time of given user
     """
