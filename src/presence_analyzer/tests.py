@@ -15,9 +15,8 @@ TEST_DATA_CSV = os.path.join(
 )
 
 TEST_USERS_XML = os.path.join(
-    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'sample_users.xml'
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
 )
-
 
 
 # pylint: disable=E1103
