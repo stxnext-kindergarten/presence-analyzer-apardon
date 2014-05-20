@@ -121,12 +121,10 @@ def parse_users_xml():
     with open(users_data, 'r') as f:
         users = etree.parse(f).find('users')
 
-    result = [
+    return [
         {
             'user_id': int(user.get('id')),
             'name': user.find('name').text
         }
         for user in users
     ]
-
-    return result
