@@ -9,7 +9,7 @@
         $(document).ready(function(){
             var loading = $('#loading');
             $.getJSON("{{ url_for('users_view') }}", function(result) {
-                var dropdown = $("#user_id");                
+                var dropdown = $("#user_id");
                 $.each(result, function(item) {
                     dropdown.append($("<option />").val(this.user_id).text(this.name));
                 });
