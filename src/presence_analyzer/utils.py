@@ -27,6 +27,29 @@ def jsonify(function):
     return inner
 
 
+def cache(cache_time):
+    """
+    Caches result od function for given time
+    """
+    cached = dict()
+    lock = threading.Lock()
+
+    def is_cache_expired():
+        return (time.time() - cached['created']) > cache_time
+
+    def decorator(function):
+        @wraps(function)
+        def inner(*args, **kwargs):
+            function_name = repr(function) + repr(args) + repr(kwargs)
+            with lock:
+                if function_name not in cached or is_cache_expired():
+                    cached['data'] = function(*args, **kwargs)
+                    cached['created'] = time.time()
+                return cached['data']
+        return inner
+    return decorator
+
+
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.
