@@ -14,6 +14,10 @@ TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
 )
 
+TEST_USERS_XML = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
+)
+
 
 # pylint: disable=E1103
 class PresenceAnalyzerViewsTestCase(unittest.TestCase):
@@ -69,8 +73,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 2)
-        self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
+        self.assertEqual(len(data), 8)
+        self.assertDictEqual(data[0], {u'user_id': 141, u'name': u'Adam P.'})
 
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
@@ -83,6 +87,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({'USERS_XML': TEST_USERS_XML})
 
     def tearDown(self):
         """
@@ -183,6 +188,16 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertIsInstance(sample_data, dict)
         self.assertEqual(len(sample_data), 7)
         self.assertEqual(sample_data, expected_result)
+
+    def test_parse_users_xml(self):
+        """
+        Test xml parser
+        """
+        parsed_data = utils.parse_users_xml()
+        expected_result = {'user_id': 19, 'name': 'Anna K.'}
+        self.assertEqual(len(parsed_data), 8)
+        self.assertIsInstance(parsed_data, list)
+        self.assertEqual(parsed_data[5], expected_result)
 
 
 def suite():
