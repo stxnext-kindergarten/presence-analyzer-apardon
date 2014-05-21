@@ -9,7 +9,8 @@ from functools import wraps
 from datetime import datetime
 from lxml import etree
 from flask import Response
-
+import threading
+import time
 from presence_analyzer.main import app
 
 import logging
@@ -50,6 +51,7 @@ def cache(cache_time):
     return decorator
 
 
+@cache(600)
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.
