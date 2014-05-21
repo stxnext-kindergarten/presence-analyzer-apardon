@@ -44,6 +44,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         resp = self.client.get('/')
         self.assertEqual(resp.status_code, 200)
+        resp = self.client.get('/foo.html')
+        self.assertEqual(resp.status_code, 404)
 
     def test_presence_mean_time_weekday(self):
         """
@@ -51,6 +53,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         resp = self.client.get('/mean_time_weekday.html')
         self.assertEqual(resp.status_code, 200)
+        resp = self.client.get('/bar.html')
+        self.assertEqual(resp.status_code, 404)
 
     def test_presence_start_end(self):
         """
@@ -58,6 +62,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         resp = self.client.get('/presence_start_end.html')
         self.assertEqual(resp.status_code, 200)
+        resp = self.client.get('/foo_bar.html')
+        self.assertEqual(resp.status_code, 404)
 
     def test_api_users(self):
         """
